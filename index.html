@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розыгрыш Bugatti Veyron</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Розыгрыш Bugatti Veyron</h1>
+        </header>
+        <main>
+            <div id="input-section">
+                <h2>Введите участников</h2>
+                <div class="input-group">
+                    <input type="text" id="participant-input" placeholder="Введите имя участника...">
+                    <button id="add-participant">Добавить</button>
+                </div>
+                <ul id="participants-list"></ul>
+                <button id="start-giveaway">Начать розыгрыш</button>
+            </div>
+            <div id="spinner-section" class="hidden">
+                <div class="spinner"></div>
+                <div id="spinner-names"></div>
+            </div>
+            <div id="winner-section" class="hidden">
+                <h2>Поздравляем победителей!</h2>
+                <div id="winner-names"></div>
+                <button id="reset-giveaway">Провести еще раз</button>
+            </div>
+        </main>
+    </div>
+
+    <template id="participant-template">
+        <li>
+            <span></span>
+            <button class="delete-btn">&times;</button>
+        </li>
+    </template>
+
+    <script src="main.js"></script>
+</body>
+</html>
