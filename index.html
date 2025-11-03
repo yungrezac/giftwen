@@ -4,43 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Розыгрыш Bugatti Veyron</title>
+    <title>Розыгрыш Bugatti Veyron - Неоновый эксклюзив</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+    <!-- Canvas для 3D-сцены -->
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="overlay"></div>
+
     <div class="app-container">
         <header>
-            <h1>Розыгрыш Bugatti Veyron</h1>
+            <h1 class="main-title">Bugatti Veyron<br><span>Giveaway</span></h1>
         </header>
         <main>
-            <div id="input-section">
-                <h2>Введите участников</h2>
+            <div id="input-section" class="card">
+                <h2>Участники</h2>
                 <div class="input-group">
                     <input type="text" id="participant-input" placeholder="Введите имя участника...">
-                    <button id="add-participant">Добавить</button>
+                    <button id="add-participant" class="glow-on-hover">+</button>
                 </div>
                 <ul id="participants-list"></ul>
-                <button id="start-giveaway">Начать розыгрыш</button>
+                <button id="start-giveaway" class="cta-button glow-on-hover">Начать розыгрыш</button>
             </div>
-            <div id="spinner-section" class="hidden">
-                <div class="spinner"></div>
-                <div id="spinner-names"></div>
+
+            <div id="spinner-section" class="card hidden">
+                <h2 id="spinner-title">Выбираем победителя...</h2>
+                <div id="spinner-names-container">
+                    <div id="spinner-names"></div>
+                </div>
             </div>
-            <div id="winner-section" class="hidden">
-                <h2>Поздравляем победителей!</h2>
-                <div id="winner-names"></div>
-                <button id="reset-giveaway">Провести еще раз</button>
+
+            <div id="winner-section" class="card hidden">
+                <h2>Поздравляем Победителей!</h2>
+                <div class="winners-list">
+                    <div class="winner-item">
+                        <span class="winner-label">Победитель #1</span>
+                        <p id="winner-name-1"></p>
+                    </div>
+                    <div class="winner-item">
+                        <span class="winner-label">Победитель #2</span>
+                        <p id="winner-name-2"></p>
+                    </div>
+                </div>
+                <button id="reset-giveaway" class="cta-button glow-on-hover">Провести еще раз</button>
             </div>
         </main>
     </div>
 
-    <template id="participant-template">
-        <li>
-            <span></span>
-            <button class="delete-btn">&times;</button>
-        </li>
-    </template>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <script src="main.js"></script>
 </body>
