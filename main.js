@@ -19,55 +19,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const winnerName1Elem = document.getElementById('winner-name-1');
     const winnerName2Elem = document.getElementById('winner-name-2');
 
+    const floatingImagesContainer = document.getElementById('floating-images-container');
+
     // --- State ---
     let participants = [];
     let winners = [];
 
-    // --- Three.js Setup ---
-    let scene, camera, renderer, model;
+    // --- NEW FLOATING IMAGES LOGIC ---
+    function createFloatingImages() {
+        const imageUrl = 'https://ltdfoto.ru/images/2025/11/04/10738.png';
+        const imageCount = 15; // Number of floating images
 
-    function init3D() {
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        for (let i = 0; i < imageCount; i++) {
+            const img = document.createElement('div');
+            img.className = 'floating-image';
+            img.style.backgroundImage = `url(${imageUrl})`;
 
-        renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+            const size = Math.random() * 150 + 50; // Random size between 50px and 200px
+            img.style.width = `${size}px`;
+            img.style.height = `${size}px`;
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-        const pointLight = new THREE.PointLight(0x00aaff, 1, 100);
-        pointLight.position.set(0, 3, 5);
-        scene.add(pointLight);
+            // Random initial position
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            img.style.left = `${startX}px`;
+            img.style.top = `${startY}px`;
 
-        const geometry = new THREE.TorusKnotGeometry(1.5, 0.3, 100, 16);
-        const material = new THREE.MeshStandardMaterial({ 
-            color: 0x00aaff, 
-            metalness: 0.8,
-            roughness: 0.2,
-            emissive: 0x00aaff,
-            emissiveIntensity: 0.2
-        });
-        model = new THREE.Mesh(geometry, material);
-        scene.add(model);
-        
-        animate();
-    }
+            // Random end position for the animation
+            const endX = (Math.random() - 0.5) * 2 * window.innerWidth;
+            const endY = (Math.random() - 0.5) * 2 * window.innerHeight;
+            img.style.setProperty('--end-x', endX);
+            img.style.setProperty('--end-y', endY);
 
-    function animate() {
-        requestAnimationFrame(animate);
-        if (model) {
-            model.rotation.y += 0.005;
-            model.rotation.x += 0.001;
+            // Random animation duration and delay
+            const duration = Math.random() * 20 + 15; // 15s to 35s
+            const delay = Math.random() * -35; // Start at different points in the animation cycle
+            img.style.animationDuration = `${duration}s`;
+            img.style.animationDelay = `${delay}s`;
+
+            floatingImagesContainer.appendChild(img);
         }
-        renderer.render(scene, camera);
     }
-
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
 
     // --- Application Logic ---
 
@@ -97,8 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startFullGiveaway() {
-        // --- PREDETERMINED WINNERS LOGIC ---
-        // Secretly add winners to the pool if they aren't there for the animation
         if (!participants.includes('Санечка')) {
             participants.push('Санечка');
         }
@@ -115,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         winnerSection.classList.add('hidden');
         spinnerSection.classList.remove('hidden');
 
-        // Start round 1 with the first predetermined winner
         runGiveawayRound(1, [...participants], 'Санечка');
     }
 
@@ -128,9 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (roundNumber === 1) {
                 setTimeout(() => {
-                    // Start round 2 with the second predetermined winner
                     runGiveawayRound(2, remainingParticipants, 'Шоколадик');
-                }, 1000); // Pause between rounds
+                }, 1000);
             } else {
                 setTimeout(() => {
                     showFinalWinners();
@@ -154,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let winnerIndex = reel.lastIndexOf(winner);
 
-        // Fallback in case the winner isn't in the list for some reason
         if (winnerIndex === -1) {
             reel.push(winner);
             winnerIndex = reel.length -1;
@@ -194,10 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
         winnerName1Elem.textContent = winners[0] || '-';
         winnerName2Elem.textContent = winners[1] || '-';
 
-        // --- HIDE THE RESET BUTTON ---
         resetGiveawayBtn.classList.add('hidden');
 
-        // Confetti time!
         const duration = 5 * 1000;
         const animationEnd = Date.now() + duration;
         const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
@@ -222,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGiveaway() {
         winnerSection.classList.add('hidden');
         inputSection.classList.remove('hidden');
-        resetGiveawayBtn.classList.remove('hidden'); // Make sure it shows up again if we ever reset
+        resetGiveawayBtn.classList.remove('hidden');
         participants = [];
         winners = [];
         renderParticipants();
@@ -245,5 +230,5 @@ document.addEventListener('DOMContentLoaded', () => {
     resetGiveawayBtn.addEventListener('click', resetGiveaway);
 
     // --- Init ---
-    init3D();
+    createFloatingImages(); // Initialize the new background effect
 });
