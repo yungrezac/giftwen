@@ -26,11 +26,48 @@ body {
     color: var(--text-color);
     display: flex;
     justify-content: center;
-    align-items: center; /* Re-centered for scaled view */
+    align-items: center;
     min-height: 100vh;
     position: relative;
     padding: 15px;
+    overflow: hidden; /* Prevent scrollbars from floating images */
 }
+
+/* --- NEW FLOATING IMAGES STYLES --- */
+#floating-images-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+}
+
+.floating-image {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: float 20s infinite linear;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.3;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translate(calc(var(--end-x) * 1px), calc(var(--end-y) * 1px)) rotate(360deg);
+        opacity: 0;
+    }
+}
+/* --- END NEW STYLES --- */
 
 body::before {
     content: '';
@@ -39,15 +76,6 @@ body::before {
     width: 100%; height: 100%;
     background-image: var(--noise-texture);
     z-index: -2;
-}
-
-#bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -3;
 }
 
 .overlay {
@@ -65,7 +93,7 @@ body::before {
     max-width: 450px;
     z-index: 1;
     animation: fadeIn 1s ease-out forwards;
-    transform: scale(0.9); /* ADDED: Scale down the whole container */
+    transform: scale(0.9);
     transform-origin: center center;
 }
 
